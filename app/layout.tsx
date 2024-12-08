@@ -1,11 +1,16 @@
 import './globals.css'; 
 import Sidebar from './components/sidebar'; 
+import React, { ReactNode } from 'react';
 
 export const metadata = {
   title: 'Next.js with Sidebar and Tailwind',
 };
 
-export default function RootLayout({ children }) {
+type RootLayoutProps = {
+  children: ReactNode; // Define the type for children
+};
+
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body className="flex h-screen">
