@@ -1,20 +1,20 @@
-'use client';
+"use client";
 import { GrPowerReset } from "react-icons/gr";
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-type TabKey = 'binomial' | 'poisson' | 'normal' | 'students';
+type TabKey = "binomial" | "poisson" | "normal" | "students";
 
 export default function Probability() {
-  const [activeTab, setActiveTab] = useState<TabKey>('binomial');
+  const [activeTab, setActiveTab] = useState<TabKey>("binomial");
 
-  const [n, setN] = useState<string>('');
-  const [p, setP] = useState<string>('');
-  const [kb, setKB] = useState<string>('');  
-  const [kp, setKP] = useState<string>('');
-  const [lambda, setLambda] = useState<string>('');
-  const [mean, setMean] = useState<string>(''); 
-  const [stdDev, setStdDev] = useState<string>(''); 
-  const [xValue, setXValue] = useState<string>(''); 
+  const [n, setN] = useState<string>("");
+  const [p, setP] = useState<string>("");
+  const [kb, setKB] = useState<string>("");
+  const [kp, setKP] = useState<string>("");
+  const [lambda, setLambda] = useState<string>("");
+  const [mean, setMean] = useState<string>("");
+  const [stdDev, setStdDev] = useState<string>("");
+  const [xValue, setXValue] = useState<string>("");
   const [resultBinomial, setResultBinomial] = useState<number | string>(0);
   const [resultPoisson, setResultPoisson] = useState<number | string>(0);
   const [resultNormal, setResultNormal] = useState<number | string>(0);
@@ -40,8 +40,7 @@ export default function Probability() {
     const pNum = parseFloat(p);
 
     // Handle input conditions like ">=4"
-    if (kb.startsWith('>=')) {
-      
+    if (kb.startsWith(">=")) {
       if (value > nNum) {
         setResultBinomial("Error: k cannot be greater than n");
         return;
@@ -51,7 +50,7 @@ export default function Probability() {
         const cNk = binomialCoefficient(n, i);
         probability += cNk * Math.pow(pNum, i) * Math.pow(1 - pNum, nNum - i);
       }
-    } else if (kb.startsWith('<=')) {
+    } else if (kb.startsWith("<=")) {
       const value = parseInt(kb.slice(2), 10);
       if (value > nNum) {
         setResultBinomial("Error: k cannot be greater than n");
@@ -70,26 +69,29 @@ export default function Probability() {
         return;
       }
       const cNk = binomialCoefficient(n, successCount);
-      probability = cNk * Math.pow(pNum, successCount) * Math.pow(1 - pNum, nNum - successCount);
+      probability =
+        cNk *
+        Math.pow(pNum, successCount) *
+        Math.pow(1 - pNum, nNum - successCount);
     }
 
     setResultBinomial(probability);
-    
   };
 
   const calculatePoisson = () => {
     const lambdaNum = parseFloat(lambda);
     const kNum = parseInt(kb, 10);
-    
+
     if (lambdaNum < 0 || kNum < 0) {
       setResultBinomial("Error: λ and k must be positive");
     }
     const factorial = (n: number): number => {
       if (n === 0) return 1;
       return n * factorial(n - 1);
-    }
-    const poissonProbability = (Math.pow(lambdaNum, kNum) * Math.exp(-lambdaNum)) / factorial(kNum);
-    setResultPoisson(poissonProbability)
+    };
+    const poissonProbability =
+      (Math.pow(lambdaNum, kNum) * Math.exp(-lambdaNum)) / factorial(kNum);
+    setResultPoisson(poissonProbability);
   };
   const calculateNormal = () => {
     const meanNum = parseFloat(mean);
@@ -97,11 +99,12 @@ export default function Probability() {
     const xNum = parseFloat(xValue);
 
     if (stdDevNum <= 0) {
-      setResultNormal('Error: Standard deviation must be greater than 0');
+      setResultNormal("Error: Standard deviation must be greater than 0");
       return;
     }
 
-    const exponent = -Math.pow(xNum - meanNum, 2) / (2 * Math.pow(stdDevNum, 2));
+    const exponent =
+      -Math.pow(xNum - meanNum, 2) / (2 * Math.pow(stdDevNum, 2));
     const normalProbability =
       (1 / (stdDevNum * Math.sqrt(2 * Math.PI))) * Math.exp(exponent);
     setResultNormal(normalProbability);
@@ -110,72 +113,89 @@ export default function Probability() {
   const tabContent: Record<TabKey, React.JSX.Element> = {
     binomial: (
       <div>
-        <h1 className='text-xl font-bold mb-4 text-center'>Binomial Distribution</h1>
+        <h1 className="text-xl font-bold mb-4 text-center">
+          Binomial Distribution
+        </h1>
         <p>Formula: P(X = k) = (nCk) * p^k * (1-p)^(n-k)</p>
-        <p>Where n = number of trials, p = probability of success, k = number of successes</p>
+        <p>
+          Where n = number of trials, p = probability of success, k = number of
+          successes
+        </p>
       </div>
     ),
     poisson: (
       <div>
-        <h1 className='text-xl font-bold mb-4 text-center'>Poisson Distribution</h1>
+        <h1 className="text-xl font-bold mb-4 text-center">
+          Poisson Distribution
+        </h1>
         <p>Formula: P(X = k) = (λ^k * e^(-λ)) / k!</p>
-        <p>Where λ = average number of occurrences, k = number of occurrences</p>
+        <p>
+          Where λ = average number of occurrences, k = number of occurrences
+        </p>
       </div>
     ),
     normal: (
       <div>
-        <h1 className='text-xl font-bold mb-4 text-center'>Normal Distribution</h1>
+        <h1 className="text-xl font-bold mb-4 text-center">
+          Normal Distribution
+        </h1>
         <p>Formula: f(x|μ,σ) = (1 / (σ√2π)) * e^(-(x-μ)² / 2σ²)</p>
         <p>Where μ = mean, σ = standard deviation</p>
       </div>
     ),
     students: (
       <div>
-        <h1 className='text-xl font-bold mb-4 text-center'>Student's t Distribution</h1>
-        <p>Formula: f(t) = (Γ((ν + 1) / 2) / (√(νπ) * Γ(ν / 2))) * (1 + (t² / ν))^(-(ν + 1) / 2)</p>
-        <p>Where ν = degrees of freedom, Γ = Gamma function, t = test statistic</p>
+        <h1 className="text-xl font-bold mb-4 text-center">
+          Student's t Distribution
+        </h1>
+        <p>
+          Formula: f(t) = (Γ((ν + 1) / 2) / (√(νπ) * Γ(ν / 2))) * (1 + (t² /
+          ν))^(-(ν + 1) / 2)
+        </p>
+        <p>
+          Where ν = degrees of freedom, Γ = Gamma function, t = test statistic
+        </p>
       </div>
     ),
   };
   const resetInputs = () => {
-    setN('');
-    setP('');
-    setKB('');
-    setKP('');
-    setLambda('');
-    setMean('');
-    setStdDev('');
-    setXValue('');
-    setResultBinomial(0); 
+    setN("");
+    setP("");
+    setKB("");
+    setKP("");
+    setLambda("");
+    setMean("");
+    setStdDev("");
+    setXValue("");
+    setResultBinomial(0);
     setResultPoisson(0);
-    setResultNormal(0); 
+    setResultNormal(0);
   };
-  
 
   return (
     <div className="h-full flex flex-col">
       <div className="flex flex-wrap justify-center space-x-2 mb-4 mx-10 items-center text-center">
         <button
-          className={`p-2  ${activeTab === 'binomial' ? 'text-indigo-500' : 'text-gray-700'}`}
-          onClick={() => setActiveTab('binomial')}
+          className={`p-2  ${activeTab === "binomial" ? "text-indigo-500" : "text-gray-700"}`}
+          onClick={() => setActiveTab("binomial")}
         >
           Binomial
         </button>
         <button
-          className={`p-2 rounded-lg ${activeTab === 'poisson' ? 'text-indigo-500' : 'text-gray-700'}`}
-          onClick={() => setActiveTab('poisson')}
+          className={`p-2 rounded-lg ${activeTab === "poisson" ? "text-indigo-500" : "text-gray-700"}`}
+          onClick={() => setActiveTab("poisson")}
         >
           Poisson
         </button>
         <button
-          className={`p-2 rounded-lg ${activeTab === 'normal' ? 'text-indigo-500' : 'text-gray-700'}`}
-          onClick={() => setActiveTab('normal')}
+          className={`p-2 rounded-lg ${activeTab === "normal" ? "text-indigo-500" : "text-gray-700"}`}
+          onClick={() => setActiveTab("normal")}
         >
           Normal
         </button>
         <button
-          className={`p-2 rounded-lg ${activeTab === 'students' ? 'text-indigo-500' : 'text-gray-700'}`}
-          onClick={() => setActiveTab('students')}
+          className={`p-2 rounded-lg ${activeTab === "students" ? "text-indigo-500" : "text-gray-700"}`}
+          onClick={() => setActiveTab("students")}
         >
           Student's
         </button>
@@ -187,45 +207,52 @@ export default function Probability() {
 
       {activeTab === 'binomial' && (
         <div className="flex w-full gap-3 justify-center items-center my-9 text-black">
-          <div className="w-full h-full max-w-sm flex flex-col items-center gap-y-5 bg-neutral-950 rounded-lg border border-zinc-600 p-6">     
+          <div className="w-full h-full max-w-sm flex flex-col items-center gap-y-5 bg-neutral-950 rounded-lg border border-zinc-600 p-6">
             <input
-              className='w-full rounded-lg p-2'
+              className="w-full rounded-lg p-2"
               type="text"
-              placeholder='n'
+              placeholder="n"
               value={n}
               onChange={(e) => setN(String(e.target.value))}
             />
             <input
-              className='w-full rounded-lg p-2'
+              className="w-full rounded-lg p-2"
               type="text"
-              placeholder='p'
+              placeholder="p"
               value={p}
               onChange={(e) => setP(String(e.target.value))}
             />
             <input
-              className='w-full rounded-lg p-2'
+              className="w-full rounded-lg p-2"
               type="text"
-              placeholder='k (e.g. >=4 or 5)'
+              placeholder="k (e.g. >=4 or 5)"
               value={kb}
               onChange={(e) => setKB(e.target.value)}
             />
-            
+
             <button
-              className='w-full bg-indigo-600 p-2 rounded-lg mt-4 text-white'
+              className="w-full bg-indigo-600 p-2 rounded-lg mt-4 text-white"
               onClick={calculateBinomial}
             >
               Calculate
             </button>
 
             {resultBinomial !== null && (
-              <div className='mt-4 text-white text-md '>
-                <p>Binomial Probability: {typeof resultBinomial === "number" ? resultBinomial.toFixed(4) : resultBinomial}</p>
+              <div className="mt-4 text-white text-md ">
+                <p>
+                  Binomial Probability:{" "}
+                  {typeof resultBinomial === "number"
+                    ? resultBinomial.toFixed(4)
+                    : resultBinomial}
+                </p>
               </div>
             )}
             <button>
-              <GrPowerReset className='text-indigo-500 text-2xl' onClick={resetInputs}/>
+              <GrPowerReset
+                className="text-indigo-500 text-2xl"
+                onClick={resetInputs}
+              />
             </button>
-            
           </div>
         </div>
       )}
@@ -255,11 +282,19 @@ export default function Probability() {
 
             {resultPoisson !== null && (
               <div className="mt-4 text-white text-xl">
-                <p>Poisson Probability: {typeof resultPoisson === "number" ? resultPoisson.toFixed(4) : resultPoisson}</p>
+                <p>
+                  Poisson Probability:{" "}
+                  {typeof resultPoisson === "number"
+                    ? resultPoisson.toFixed(4)
+                    : resultPoisson}
+                </p>
               </div>
             )}
             <button>
-              <GrPowerReset className='text-indigo-500 text-2xl' onClick={resetInputs}/>
+              <GrPowerReset
+                className="text-indigo-500 text-2xl"
+                onClick={resetInputs}
+              />
             </button>
           </div>
         </div>
@@ -297,11 +332,19 @@ export default function Probability() {
 
             {resultNormal !== null && (
               <div className="mt-4 text-white text-lg">
-                <p>Poisson Probability: {typeof resultNormal === "number" ? resultNormal.toFixed(4) : resultNormal}</p>
+                <p>
+                  Poisson Probability:{" "}
+                  {typeof resultNormal === "number"
+                    ? resultNormal.toFixed(4)
+                    : resultNormal}
+                </p>
               </div>
             )}
             <button>
-              <GrPowerReset className='text-indigo-500 text-2xl' onClick={resetInputs}/>
+              <GrPowerReset
+                className="text-indigo-500 text-2xl"
+                onClick={resetInputs}
+              />
             </button>
           </div>
         </div>
