@@ -146,7 +146,7 @@ export default function Probability() {
     students: (
       <div>
         <h1 className="text-xl font-bold mb-4 text-center">
-          Student's t Distribution
+          Students t Distribution
         </h1>
         <p>
           Formula: f(t) = (Γ((ν + 1) / 2) / (√(νπ) * Γ(ν / 2))) * (1 + (t² /
@@ -197,7 +197,7 @@ export default function Probability() {
           className={`p-2 rounded-lg ${activeTab === "students" ? "text-indigo-500" : "text-gray-700"}`}
           onClick={() => setActiveTab("students")}
         >
-          Student's
+          Students
         </button>
       </div>
 
