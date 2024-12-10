@@ -5,7 +5,7 @@ export default function Sidebar() {
   return (
     <aside className="w-60 h-screen bg-gray-800 p-4">
       <nav>
-        <ul className="space-y-4">
+        <ul className="space-y-4 mt-12">
           <li>
             <Link href="/probability" className="block text-white hover:text-blue-400">
               Probability Distributions
